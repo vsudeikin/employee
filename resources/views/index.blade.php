@@ -1,6 +1,6 @@
 @extends('layouts.index')
 
-@section('index')
+@section('content')
 
 <div class="container">
 
