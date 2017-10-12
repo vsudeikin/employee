@@ -21,6 +21,26 @@ class Employee extends Model
         return $this->belongsTo('App\Position');
     }
 
-    
+    /**
+     * Returns parent employees
+     * @return [type] [description]
+     */
+    public function pid()
+    {
+        return $this->belongsTo($this, 'id');
+    }
+
+    /**
+     * Returns child employees
+     * @return [type] [description]
+     */
+    public function cid()
+    {
+        return $this->hasMany($this, 'pid');
+    }
+
+    public function rootEmployer(){
+        return $this->where('pid', 0)->with('cid')->get();
+    }
 
 }

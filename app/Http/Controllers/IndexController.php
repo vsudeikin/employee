@@ -13,10 +13,14 @@ class IndexController extends Controller
      * Show index page
      * @return object main view
      */
-    public function index()
+    public function index(Employee $employee)
     {
+        
+    //  $list = $employee->where('position_id', '<', 8)->with('cid')->get()->toArray();
+      $list = $employee->rootEmployer();
+      
+      //dump($list);
 
-        dump(Position::find($i)->employee->toArray());
+      return view('index')->with('list', $list);
    }
-
 }

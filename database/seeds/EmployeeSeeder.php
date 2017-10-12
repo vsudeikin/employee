@@ -10,11 +10,11 @@ class EmployeeSeeder extends Seeder
      * Array of different employee count sorted by status
      * @var [type]
      */
-    static protected $employee = [1, 2, 4, 8, 16, 16, 16];
+    private static $employee = [1, 2, 4, 8, 16, 16, 16];
 
-    static protected $position = 1;
-    static protected $salary = 10000;
-    static protected $pid = null;
+    private static $position = 1;
+    private static $salary = 10000;
+    private static $pid = null;
 
      /**
      * Use faker Factory and generate dynamyc data.
@@ -25,28 +25,28 @@ class EmployeeSeeder extends Seeder
     {
       factory(Employee::class, 99)->make()
        ->each(function ($e) {
-                EmployeeSeeder::calculate();
-                $e->position_id = EmployeeSeeder::$position;
-                $e->pid = EmployeeSeeder::$pid;
-                $e->salary = EmployeeSeeder::$salary;
+                self::calculate();
+                $e->position_id = self::$position;
+                $e->pid = self::$pid;
+                $e->salary = self::$salary;
                 $e->save();
        });
     }
 
-    protected static function calculate()
+    private function calculate()
     {
         for ($i = 2; $i <= 7; $i++) {
             if ( Position::find($i)->employee->count() == 0) {
-                EmployeeSeeder::setData($i);
+                self::setData($i);
                 break;
-            } elseif (Position::find($i)->employee->count() <= EmployeeSeeder::$employee[$i - 1]) {
+            } elseif (Position::find($i)->employee->count() <= self::$employee[$i - 1]) {
                 $bosses = Position::find($i - 1)->employee->toArray();
                 $countB = Position::find($i - 1)->employee->count();
                 $index = $countB ? random_int(0, $countB) : 0;
                 if($index) {
                     $index--;
                 }
-                EmployeeSeeder::setData($i, $bosses[$index]['id']);
+                self::setData($i, $bosses[$index]['id']);
                 break;
             }
         }
@@ -56,9 +56,9 @@ class EmployeeSeeder extends Seeder
      * Calculate salary by rang
      * @param intager $position employee position
      */
-    protected static function setSalary($position)
+    private function setSalary($position)
     {
-        EmployeeSeeder::$salary = (int)(10000/$position);
+        self::$salary = (int)(10000/$position);
     }
 
     /**
@@ -66,15 +66,15 @@ class EmployeeSeeder extends Seeder
      * @param integer $pos position
      * @param integer $pid calculated parent
      */
-    protected static function setData($pos, $pid = null)
+    private function setData($pos, $pid = null)
     {
-        EmployeeSeeder::setSalary($pos);
-        EmployeeSeeder::$position = $pos;
+        self::setSalary($pos);
+        self::$position = $pos;
         if ($pos < 5){
             if ($pid) {
-                EmployeeSeeder::$pid = $pid;
+                self::$pid = $pid;
             } else {
-                 EmployeeSeeder::$pid = Employee::latest()->first()->id;
+                 self::$pid = Employee::latest()->first()->id;
             }
         } else {
             $bosses = Position::find(4)->employee->toArray();
@@ -83,7 +83,7 @@ class EmployeeSeeder extends Seeder
             if($index) {
                 $index--;
             }
-            EmployeeSeeder::$pid = $bosses[$index]['id'];
+            self::$pid = $bosses[$index]['id'];
         }
     }
 

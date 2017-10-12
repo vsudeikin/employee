@@ -17,8 +17,8 @@ class EmployeeParentId extends Migration
          * Add PID (Boss id)
          */
         Schema::table('employees', function (Blueprint $table) {
-            $table->integer('pid')->unsigned()->after('position_id')->nullable();
-            $table->foreign('pid')->references('id')->on('employees');
+            $table->integer('pid')->unsigned()->after('position_id');//->nullable();
+            //$table->foreign('pid')->references('id')->on('employees');
         });
     }
 
@@ -30,7 +30,7 @@ class EmployeeParentId extends Migration
     public function down()
     {
         Schema::table('employees', function (Blueprint $table) {
-            $table->dropForeign(['pid']);
+           // $table->dropForeign(['pid']);
             $table->dropColumn('pid');
         });
     }

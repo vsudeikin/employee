@@ -17,7 +17,7 @@ class DirectorSeeder extends Seeder
             'start_work' => '1985-07-03',
             'salary' => 10000,
             'position_id' => 1,
-            'pid' => null,       
+            'pid' => 0,       
         ]);
     }
 }
