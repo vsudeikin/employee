@@ -7,10 +7,25 @@ use App\Position;
 class EmployeeSeeder extends Seeder
 {
     /**
-     * Array of different employee count sorted by status
-     * @var [type]
+     * Array of different employee count +1 sorted by status.
+     * Product Manager [1]
+     * Project Manager [2]
+     * Team lead       [3]
+     * Designer        [4]
+     * Front End       [5]
+     * Back End        [6]
+     *
+     * To make 50k Seeds fill [1, 15, 29, 56, 16631, 16631, 16631 ]
+     * And set $seedCount = 50000 
+     * 
+     * @var array
      */
-    private static $employee = [1, 2, 4, 8, 16, 16, 16];
+    private static $employee = [1, 5, 10, 20, 40, 40, 40];
+    /**
+     * Employee count to seed
+     * @var integer
+     */
+    private static $seedCount = 162;
 
     private static $position = 1;
     private static $salary = 10000;
@@ -23,7 +38,7 @@ class EmployeeSeeder extends Seeder
      */
     public function run()
     {
-      factory(Employee::class, 99)->make()
+      factory(Employee::class, self::$seedCount)->make()
        ->each(function ($e) {
                 self::calculate();
                 $e->position_id = self::$position;
