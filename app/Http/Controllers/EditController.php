@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Employee;
 
 class EditController extends Controller
 {
@@ -20,9 +21,9 @@ class EditController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        
     }
 
     /**
@@ -43,7 +44,19 @@ class EditController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'name' => 'required',
+            'salary' => 'required|numeric',
+            'pid' => 'required|numeric',
+            ]);
+
+        $employee = Employee::find($request->id);
+        $employee->name = $request->name;
+        $employee->salary = $request->salary;
+        $employee->pid =    $request->pid;
+        $employee->save();
+
+        return redirect()->route('index');
     }
 
     /**
@@ -54,18 +67,35 @@ class EditController extends Controller
      */
     public function show($id)
     {
-        //
+        //dump($id);
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * There is no need to validate $id because that is the restricted area
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
-        //
+       
+        $employee = Employee::find($id);
+        $newBosses = $employee->position_id <= 4 ? $employee->position_id - 1 : 4;
+        $bosses = Employee::get()->where('position_id', $newBosses);
+        $bossName = Employee::find($employee->pid)->name; 
+
+        $var = [
+            'id' => $employee->id,
+            'name' => $employee->name,
+            'bossName' => $bossName,
+            'position_id' => $employee->position->position,
+            'salary' => $employee->salary,
+            'bosses' => $bosses,
+            'cid' => $employee->cid->count(),
+            'work' => $employee->start_work,
+        ];
+
+        return view('edit')->with($var);
     }
 
     /**
@@ -88,6 +118,7 @@ class EditController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Employee::destroy($id);
+        return redirect()->route('index');
     }
 }

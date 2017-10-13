@@ -40,7 +40,7 @@ class Employee extends Model
     }
 
     public function rootEmployer(){
-        return $this->where('pid', 0)->with('cid')->get();
+        return $this->where('id', 1)->with('cid')->get();
     }
 
 }

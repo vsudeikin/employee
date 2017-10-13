@@ -16,7 +16,6 @@ class IndexController extends Controller
     public function index(Employee $employee)
     {
         
-    //  $list = $employee->where('position_id', '<', 8)->with('cid')->get()->toArray();
       $list = $employee->rootEmployer();
       
       //dump($list);

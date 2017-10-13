@@ -4,7 +4,12 @@
 
 <div class="container">
     <ul class="ul-treefree ul-dropfree">
-        @each('list', $list, 'items')
+        <li><strong>Director</strong></li>
+        <li>{{ $list->first()->name }}
+            <ul class="ul-drop">
+                @each('list', $list, 'items')
+            </ul>    
+        </li>
     </ul>
 </div>
 
